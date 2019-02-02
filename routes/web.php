@@ -18,10 +18,16 @@ Route::get('/', [
 	'uses' => 'HomeController@index',
 ]);
 
+Route::get('/assessment', [
+	'as' => 'assessment',
+	'uses' => 'HomeController@onlySourceTitle'
+]);
+
 Route::post('/posts', [
 	'as' => 'getPost',
 	'uses' => 'HomeController@show'
 ]);
+
 
 Route::get('test-broadcast', function() {
 	$objArticle = Article::find(1);

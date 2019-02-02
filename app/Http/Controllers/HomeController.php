@@ -55,6 +55,23 @@ class HomeController extends Controller
 	}
 
 	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function onlySourceTitle(Request $request)
+	{
+		$tsStart = microtime(true);
+		$objArticle = Article::select('source_name as source', 'title')->orderBy('id', 'desc')->get();
+		$tsEnd = microtime(true);
+		$fltTimeTaken = $tsEnd - $tsStart;
+		$arrTime['time_taken'] = round($fltTimeTaken, 3).'second(s)';
+		$objArticle->push($arrTime);
+		return response()->json($objArticle, 200, [], JSON_PRETTY_PRINT);
+	}
+
+	/**
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
