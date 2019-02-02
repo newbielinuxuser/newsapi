@@ -16,6 +16,7 @@ git clone https://github.com/newbielinuxuser/newsapi.git
 ## Install any missing PHP packages
 ```
 apt install php7.1 libapache2-mod-php7.1 php7.1-mbstring php7.1-xmlrpc php7.1-soap php7.1-gd php7.1-xml php7.1-cli ```
+```
 
 ## Install/update composer packages
 ```
