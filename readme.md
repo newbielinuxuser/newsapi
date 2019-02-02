@@ -78,3 +78,10 @@ php artisan migrate:fresh --seed
 ```
 php artisan queue:listen --tries=1
 ```
+
+## Start the server
+```
+php artisan serve
+```
+
+Done! You may now view the websites at http://localhost:8000
