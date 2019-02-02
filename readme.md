@@ -8,17 +8,44 @@ Redis
 Composer
 Npm/Node.js
 
-Assuming if already have all the above software
-## Step 1 - install/update composer packages
+## Starting by cloning this repository
+```
+https://github.com/newbielinuxuser/newsapi.git
+```
+
+## Install/update composer packages
+```
 composer update
 npm run dev
+php artisan key:gen
+```
 
-## Step 2 - Change .env file for database and configuration, look for the lines below and change accordingly
+## Change .env file for database and config, look for the lines below and change accordingly
+```
 DB_DATABASE=your_db_name
 DB_USERNAME=your_db_username
 DB_PASSWORD=your_db_password
 BROADCAST_DRIVER=redis
 QUEUE_CONNECTION=redis
+```
+
+## Install laravel-echo-server 
+```
+npm install -g laravel-echo-server
+```
+
+After installing, kindly run initial for first time setup
+```
+laravel-echo-server init
+? Do you want to run this server in development mode? No
+? Which port would you like to serve from? 6001
+? Which database would you like to use to store presence channel members? redis
+? Enter the host of your Laravel authentication server. http://localhost
+? Will you be serving on http or https? http
+? Do you want to generate a client ID/Key for HTTP API? No
+? Do you want to setup cross domain access to the API? No
+? What do you want this config to be saved as? laravel-echo-server.json
+```
 
 Assuming if starting from an empty server
 ## Step 1 - Installing Apache2
