@@ -7,6 +7,8 @@
 - Redis
 - Composer
 - Npm/Node.js
+- Supervisor
+- Webpack mix
 
 ## Starting by cloning this gist to install prerequisite
 ```
@@ -38,7 +40,7 @@ echo "create database newsapi_db; GRANT ALL PRIVILEGES ON newsapi_db.* TO 'usern
 ```
 By default password is empty if mysql_secure_installation not yet perform
 
-## Change .env file for database and config, look for the lines below and change it to your database setting accordingly
+## Change .env file for database and config, look for the code below and change it
 ```
 nano .env
 DB_DATABASE=newsapi_db
@@ -81,12 +83,12 @@ And paste the below code at the end of the line
 */15 * * * * php /var/www/html/newsapi/artisan articles:get
 ```
 
-# Adding background job into supervisor
+## Adding background job into supervisor
 ```
 cd /etc/supervisor/conf.d/
 nano newsapi.conf
 ```
-Copy and paste the following codes into newsapi.conf
+Copy and paste the following codes into newsapi.conf and save it
 ```
 [program:laravel-queue]
 process_name=%(program_name)s_%(process_num)02d
@@ -109,7 +111,7 @@ numprocs=1
 redirect_stderr=true
 stdout_logfile=/var/www/html/newsapi/storage/logs/echo.log
 ```
-Reload and update supervisor
+Reread and update supervisor
 ```
 supervisorctl reread
 supervisorctl update
@@ -153,4 +155,4 @@ sudo chown -R www-data:www-data /var/www/html/
 sudo chmod -R 755 /var/www/html/
 ```
 
-Done! You may now view the websites at http://localhost:8000
+Done! You may now view the websites at http://your-server-ip/
