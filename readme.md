@@ -3,34 +3,46 @@
 - Linux Distro - Ubuntu 18.04
 - Apache2
 - MySQL
-- PHP 7.1.3 or above
+- PHP 7.2
 - Redis
 - Composer
 - Npm/Node.js
 
-## Starting by cloning this repository
+## Starting by cloning this gist to install prerequisite
 ```
-git clone https://github.com/newbielinuxuser/newsapi.git
+git clone https://gist.github.com/43163060d1b7b013fe811e5251439801.git
+cd 43163060d1b7b013fe811e5251439801/
+chmod +x install.sh
+./install.sh
 ```
 
-## Install any missing PHP packages
+## Cloning this repository
 ```
-apt install php7.1 libapache2-mod-php7.1 php7.1-mbstring php7.1-xmlrpc php7.1-soap php7.1-gd php7.1-xml php7.1-cli php7.1-zip
+cd /var/www/html/
+git clone https://github.com/newbielinuxuser/newsapi.git
 ```
 
 ## Install/update composer packages
 ```
-composer update
-npm run dev
+cd newsapi
+cp .env.example .env
+composer install
 php artisan key:gen
+npm install
+npm run dev
 ```
 
+## Create demo database in MySQL
+```
+echo "create database newsapi_db" | mysql -u root -p
+```
+By default password is empty if mysql_secure_installation not yet perform
 
 ## Change .env file for database and config, look for the lines below and change it to your database setting accordingly
 ```
-DB_DATABASE=your_db_name
-DB_USERNAME=your_db_username
-DB_PASSWORD=your_db_password
+DB_DATABASE=newsapi_db
+DB_USERNAME=root
+DB_PASSWORD=
 BROADCAST_DRIVER=redis
 QUEUE_CONNECTION=redis
 ```
@@ -53,15 +65,10 @@ laravel-echo-server init
 ? What do you want this config to be saved as? laravel-echo-server.json
 ```
 
-Start laravel-echo-server
-```
-laravel-echo-server start
-```
-
 ## Set your permission correctly
 ```
-sudo chown -R www-data:www-data /var/www/html/newsapi/
-sudo chmod -R 755 /var/www/html/newsapi/
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
 ```
 
 ## Build database
@@ -74,14 +81,16 @@ php artisan migrate:fresh --seed
 */15 * * * * php /var/www/html/newsapi/artisan articles:get
 ```
 
-## Run job queue in background
+Start laravel-echo-server
+open a new terminal
 ```
-php artisan queue:listen --tries=1
+laravel-echo-server start
 ```
 
-## Start the server
+## Run job queue in background
+open a new terminal
 ```
-php artisan serve
+php artisan queue:listen --tries=1
 ```
 
 Done! You may now view the websites at http://localhost:8000
