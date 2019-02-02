@@ -34,15 +34,16 @@ npm run dev
 
 ## Create demo database in MySQL
 ```
-echo "create database newsapi_db" | mysql -u root -p
+echo "create database newsapi_db; GRANT ALL PRIVILEGES ON newsapi_db.* TO 'username'@'localhost' IDENTIFIED BY 'password'; flush privileges;" | mysql -u root -p
 ```
 By default password is empty if mysql_secure_installation not yet perform
 
 ## Change .env file for database and config, look for the lines below and change it to your database setting accordingly
 ```
+nano .env
 DB_DATABASE=newsapi_db
-DB_USERNAME=root
-DB_PASSWORD=
+DB_USERNAME=username
+DB_PASSWORD=password
 BROADCAST_DRIVER=redis
 QUEUE_CONNECTION=redis
 ```
@@ -65,12 +66,6 @@ laravel-echo-server init
 ? What do you want this config to be saved as? laravel-echo-server.json
 ```
 
-## Set your permission correctly
-```
-sudo chown -R www-data:www-data /var/www/html/
-sudo chmod -R 755 /var/www/html/
-```
-
 ## Build database
 ```
 php artisan migrate:fresh --seed
@@ -78,19 +73,84 @@ php artisan migrate:fresh --seed
 
 ## Add cronjob to get new articles every 15th minutes
 ```
+crontab -e
+```
+
+And paste the below code at the end of the line
+```
 */15 * * * * php /var/www/html/newsapi/artisan articles:get
 ```
 
-Start laravel-echo-server
-open a new terminal
+# Adding background job into supervisor
 ```
-laravel-echo-server start
+cd /etc/supervisor/conf.d/
+nano newsapi.conf
+```
+Copy and paste the following codes into newsapi.conf
+```
+[program:laravel-queue]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/html/newsapi/artisan queue:listen --tries=3
+autostart=true
+autorestart=true
+user=www-data
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/var/www/html/newsapi/storage/logs/queue.log
+
+[program:laravel-echo]
+process_name=%(program_name)s_%(process_num)02d
+directory=/var/www/html/newsapi
+command=/usr/bin/laravel-echo-server start
+autostart=true
+autorestart=true
+user=www-data
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/var/www/html/newsapi/storage/logs/echo.log
+```
+Reload and update supervisor
+```
+supervisorctl reread
+supervisorctl update
 ```
 
-## Run job queue in background
-open a new terminal
+## Configure Apache2 and point it to the correct folder
 ```
-php artisan queue:listen --tries=1
+sudo nano /etc/apache2/sites-available/laravel.conf
+```
+Copy and paste the below codes into laravel.conf
+```
+<VirtualHost *:80>   
+  ServerAdmin admin@example.com
+     DocumentRoot /var/www/html/newsapi/public
+     ServerName example.com
+
+     <Directory /var/www/html/newsapi/public>
+        Options +FollowSymlinks
+        AllowOverride All
+        Require all granted
+     </Directory>
+
+     ErrorLog ${APACHE_LOG_DIR}/error.log
+     CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+Enable the config above and enable url rewrite
+```
+sudo a2ensite laravel.conf
+sudo a2enmod rewrite
+```
+
+Restart apache2
+```
+service apache2 restart
+```
+
+## Finally set your permission correctly
+```
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
 ```
 
 Done! You may now view the websites at http://localhost:8000
