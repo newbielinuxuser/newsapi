@@ -40,9 +40,13 @@ echo "create database newsapi_db; GRANT ALL PRIVILEGES ON newsapi_db.* TO 'usern
 ```
 By default password is empty if mysql_secure_installation not yet perform
 
-## Change .env file for database and config, look for the code below and change it
+## Change .env file for database and config
 ```
 nano .env
+```
+
+## Look for the code below and change accordingly
+```
 DB_DATABASE=newsapi_db
 DB_USERNAME=username
 DB_PASSWORD=password
@@ -55,7 +59,7 @@ QUEUE_CONNECTION=redis
 npm install -g laravel-echo-server
 ```
 
-After installing, kindly run initial for first time setup
+After installing, run initial for first time setup
 ```
 laravel-echo-server init
 ? Do you want to run this server in development mode? No
@@ -154,5 +158,12 @@ service apache2 restart
 sudo chown -R www-data:www-data /var/www/html/
 sudo chmod -R 755 /var/www/html/
 ```
+
+### Note
+- newsapi.org free tier api key will delay 15 minutes.
+- You might want to change your api key at app/Console/Command/GetArticles.php @ line 50
+- News article will append in the websites at realtime.
+- Only fetching all categories from 3 countries, add more countries at app/Console/Command/GetArticles.php @ line 46
+- Working on Dockerfile for ease of deployment
 
 Done! You may now view the websites at http://your-server-ip/
