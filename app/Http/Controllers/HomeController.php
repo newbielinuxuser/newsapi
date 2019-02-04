@@ -66,9 +66,7 @@ class HomeController extends Controller
 		$objArticle = Article::select('source_name as source', 'title')->orderBy('id', 'desc')->get();
 		$tsEnd = microtime(true);
 		$fltTimeTaken = $tsEnd - $tsStart;
-		$arrTime['time_taken'] = round($fltTimeTaken, 3).'second(s)';
-		$objArticle->push($arrTime);
-		return response()->json($objArticle, 200, [], JSON_PRETTY_PRINT);
+		return response()->json(['data' => $objArticle, 'time_taken' => round($fltTimeTaken, 3).'second(s)', 'total_record' => $objArticle->count()], 200, [], JSON_PRETTY_PRINT);
 	}
 
 	/**
