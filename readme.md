@@ -166,4 +166,7 @@ sudo chmod -R 755 /var/www/html/
 - Only fetching all categories from 3 countries, add more countries at app/Console/Command/GetArticles.php @ line 46
 - Working on Dockerfile for ease of deployment
 
-Done! You may now view the websites at http://your-server-ip/
+Done! You may now view the website application at http://your-server-ip/ and the specific assessment given at http://your-server-ip/assessment
+
+
+
