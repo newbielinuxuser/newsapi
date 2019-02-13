@@ -1,14 +1,13 @@
 version: "3"
 services:
-	
-	web:
-		container_name: ${APP_NAME}_web
-		build:
-			context: ./docker/web
-		ports:
-			- 9000:80
-		volumes:
-			- ./:/var/www/html/newsapi
+  web:
+    container_name: ${APP_NAME}_web
+    build:
+      context: ./docker/web
+    ports:
+      - 9000:80
+    volumes:
+      - ./:/var/www/html/newsapi
 
   db:
     container_name: ${APP_NAME}_db

@@ -3,7 +3,9 @@ MAINTAINER Jason Phoong <zphoong@yahoo.com>
 LABEL Description="Dockerized Assignment for Mach-X" \
 	License="Apache License 2.0" \
 	Version="1.0"
-
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Kuala_Lumpur
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get -y install git zip unzip git nano tree curl cron apache2
@@ -20,7 +22,7 @@ CMD echo "Nodejs version" && nodejs -v
 CMD echo "Npm version" && npm -v
 
 COPY . /var/www/html/newsapi/
-COPY .env /var/www/html/newsapi/.env
+COPY env /var/www/html/newsapi/.env
 RUN composer install
 CMD php artisan key:gen
 CMD npm install
