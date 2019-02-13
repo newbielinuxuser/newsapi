@@ -1,0 +1,29 @@
+version: "3"
+services:
+	
+	web:
+		container_name: ${APP_NAME}_web
+		build:
+			context: ./docker/web
+		ports:
+			- 9000:80
+		volumes:
+			- ./:/var/www/html/newsapi
+
+  db:
+    container_name: ${APP_NAME}_db
+    image: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysqldata:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+      - MYSQL_DATABASE=newsapi_db
+      - MYSQL_USER=username
+      - MYSQL_PASSWORD=password
+  cache:
+    container_name: ${APP_NAME}_redis
+    image: redis
+    ports:
+      - 6379:6379
