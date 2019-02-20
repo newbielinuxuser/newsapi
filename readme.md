@@ -29,7 +29,7 @@ php artisan migrate:fresh --seed
 
 Done! You may now view the website application at http://your-server-ip/ and the specific assessment given at http://your-server-ip/assessment
 
-## Manual Install
+## Install Manually
 ### Prerequisite
 
 - Linux Distro - Ubuntu 18.04
