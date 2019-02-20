@@ -1,4 +1,36 @@
-## NewsAPI prerequisite
+## Install with Docker
+### Prerequisite
+- docker
+- docker-compose
+```
+git clone --recursive https://github.com/newbielinuxuser/newsapi.git
+cd newsapi/laradock
+```
+### Build with detached mode
+```
+sudo docker-compose up -d php-worker laravel-echo-server nginx redis mysql
+```
+
+### Login into workspace container
+```
+sudo docker-compose exec --user=machx workspace bash
+```
+
+### Install the plugins
+```
+composer install && npm install
+```
+
+### Cache all configurations & Populate the database
+```
+php artisan config:cache
+php artisan migrate:fresh --seed
+```
+
+Done! You may now view the website application at http://your-server-ip/ and the specific assessment given at http://your-server-ip/assessment
+
+## Manual Install
+### prerequisite
 
 - Linux Distro - Ubuntu 18.04
 - Apache2
@@ -10,7 +42,7 @@
 - Supervisor
 - Webpack mix
 
-## Starting by cloning this gist to install prerequisite
+### Starting by cloning this gist to install prerequisite
 ```
 git clone https://gist.github.com/43163060d1b7b013fe811e5251439801.git
 cd 43163060d1b7b013fe811e5251439801/
@@ -18,13 +50,13 @@ chmod +x install.sh
 ./install.sh
 ```
 
-## Cloning this repository
+### Cloning this repository
 ```
 cd /var/www/html/
 git clone https://github.com/newbielinuxuser/newsapi.git
 ```
 
-## Install/update composer packages
+### Install/update composer packages
 ```
 cd newsapi
 cp .env.example .env
@@ -34,18 +66,18 @@ npm install
 npm run dev
 ```
 
-## Create demo database in MySQL
+### Create demo database in MySQL
 ```
 echo "create database newsapi_db; GRANT ALL PRIVILEGES ON newsapi_db.* TO 'username'@'localhost' IDENTIFIED BY 'password'; flush privileges;" | mysql -u root -p
 ```
 By default password is empty if mysql_secure_installation not yet perform
 
-## Change .env file for database and config
+### Change .env file for database and config
 ```
 nano .env
 ```
 
-## Look for the code below and change accordingly
+### Look for the code below and change accordingly
 ```
 DB_DATABASE=newsapi_db
 DB_USERNAME=username
@@ -54,7 +86,7 @@ BROADCAST_DRIVER=redis
 QUEUE_CONNECTION=redis
 ```
 
-## Install laravel-echo-server 
+### Install laravel-echo-server 
 ```
 npm install -g laravel-echo-server
 ```
@@ -72,12 +104,12 @@ laravel-echo-server init
 ? What do you want this config to be saved as? laravel-echo-server.json
 ```
 
-## Build database
+### Build database
 ```
 php artisan migrate:fresh --seed
 ```
 
-## Add cronjob to get new articles every 15th minutes
+### Add cronjob to get new articles every 15th minutes
 ```
 crontab -e
 ```
@@ -87,7 +119,7 @@ And paste the below code at the end of the line
 */15 * * * * php /var/www/html/newsapi/artisan articles:get
 ```
 
-## Adding background job into supervisor
+### Adding background job into supervisor
 ```
 cd /etc/supervisor/conf.d/
 nano newsapi.conf
@@ -121,7 +153,7 @@ supervisorctl reread
 supervisorctl update
 ```
 
-## Configure Apache2 and point it to the correct folder
+### Configure Apache2 and point it to the correct folder
 ```
 sudo nano /etc/apache2/sites-available/laravel.conf
 ```
@@ -153,13 +185,13 @@ Restart apache2
 service apache2 restart
 ```
 
-## Finally set your permission correctly
+### Finally set your permission correctly
 ```
 sudo chown -R www-data:www-data /var/www/html/
 sudo chmod -R 755 /var/www/html/
 ```
 
-### Note
+#### Note
 - newsapi.org free tier api key will delay 15 minutes.
 - You might want to change your api key at app/Console/Command/GetArticles.php @ line 50
 - News article will append in the websites at realtime.
