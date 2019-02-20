@@ -13,7 +13,7 @@ sudo docker-compose up -d php-worker laravel-echo-server nginx redis mysql
 
 ### Login into workspace container
 ```
-sudo docker-compose exec --user=machx workspace bash
+sudo docker-compose exec --user=laradock workspace bash
 ```
 
 ### Install the plugins
